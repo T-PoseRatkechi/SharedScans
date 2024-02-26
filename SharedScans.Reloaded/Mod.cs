@@ -40,11 +40,6 @@ public class Mod : ModBase, IExports
         this.modLoader.GetController<IStartupScanner>().TryGetTarget(out var scanner);
         this.scans = new(new(scanner!, this.hooks));
         this.modLoader.AddOrReplaceController<ISharedScans>(this.owner, this.scans);
-
-        this.modLoader.OnModLoaderInitialized += () =>
-        {
-            ScanHooks.Initialize(scanner!, this.hooks);
-        };
     }
 
     #region Standard Overrides

@@ -21,6 +21,11 @@ internal class SharedScansService : ISharedScans
             {
                 listener.SetScanFound(hooks, result);
             }
+
+            if (scanListeners.Length > 0)
+            {
+                Log.Information($"Scan for \"{id}\" given to {scanListeners.Length} listener(s).");
+            }
         });
     }
 
