@@ -10,11 +10,14 @@
   "ModR2RManagedDll64": "x64/SharedScans.Reloaded.dll",
   "ModNativeDll32": "",
   "ModNativeDll64": "",
-  "IsLibrary": false,
+  "IsLibrary": true,
   "ReleaseMetadataFileName": "SharedScans.Reloaded.ReleaseMetadata.json",
   "PluginData": {},
-  "IsUniversalMod": false,
-  "ModDependencies": [ "reloaded.sharedlib.hooks" ],
+  "IsUniversalMod": true,
+  "ModDependencies": [
+    "reloaded.sharedlib.hooks",
+    "Reloaded.Memory.SigScan.ReloadedII"
+  ],
   "OptionalDependencies": [],
   "SupportedAppId": [],
   "ProjectUrl": ""
