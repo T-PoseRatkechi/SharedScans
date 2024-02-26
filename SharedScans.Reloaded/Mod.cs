@@ -32,6 +32,7 @@ public class Mod : ModBase, IExports
         this.modConfig = context.ModConfig;
 
         Log.Initialize("SharedScans", this.log, Color.White);
+        Log.LogLevel = this.config.LogLevel;
 
 #if DEBUG
         Debugger.Launch();
@@ -40,6 +41,13 @@ public class Mod : ModBase, IExports
         this.modLoader.GetController<IStartupScanner>().TryGetTarget(out var scanner);
         this.scans = new(new(scanner!, this.hooks));
         this.modLoader.AddOrReplaceController<ISharedScans>(this.owner, this.scans);
+
+        this.ApplyConfig();
+    }
+
+    private void ApplyConfig()
+    {
+        Log.LogLevel = this.config.LogLevel;
     }
 
     #region Standard Overrides
@@ -49,6 +57,7 @@ public class Mod : ModBase, IExports
         // ... your code here.
         config = configuration;
         log.WriteLine($"[{modConfig.ModId}] Config Updated: Applying");
+        this.ApplyConfig();
     }
 
     public Type[] GetTypes() => new Type[] { typeof(ISharedScans) };
