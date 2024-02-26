@@ -2,26 +2,41 @@
 
 public interface ISharedScans
 {
-    void AddScan<TFunction>(string id, string pattern);
+    /// <summary>
+    /// Add a scan with the given Scan ID.
+    /// </summary>
+    /// <param name="id">Scan ID.</param>
+    /// <param name="pattern">Scan pattern.</param>
+    void AddScan(string id, string pattern);
 
+    /// <summary>
+    /// Add a scan for a function using <typeparamref name="TFunction"/>'s name for the Scan ID.
+    /// </summary>
+    /// <typeparam name="TFunction">Function scan is for.</typeparam>
+    /// <param name="pattern">Scan pattern.</param>
     void AddScan<TFunction>(string pattern);
 
-    HookContainer<TFunction> CreateHook<TFunction>(string id, Action<nint> success);
+    /// <summary>
+    /// Create a Reloaded hook for the given function, once the given
+    /// function is successfully found.
+    /// </summary>
+    /// <typeparam name="TFunction">Function.</typeparam>
+    /// <param name="hookFunction">The hooking function.</param>
+    /// <param name="owner">Hook owner.</param>
+    /// <returns>Hook container. Use to call original function and keep reference to hook.</returns>
+    HookContainer<TFunction> CreateHook<TFunction>(TFunction hookFunction, string owner);
 
-    HookContainer<TFunction> CreateHook<TFunction>(string modName, TFunction hookFunc);
-}
+    /// <summary>
+    /// Creates a listener for a scan with the given ID.
+    /// Once found the callback is passed the scan result.
+    /// </summary>
+    /// <param name="id">Scan ID.</param>
+    /// <param name="success">Success callback.</param>
+    void CreateListener(string id, Action<nint> success);
 
-public class HookContainer<TFunction>
-{
-    public string Id { get; set; }
-
-    public string Pattern { get; set; }
-
-    public nint Address { get; set; }
-
-    public object? HookInstance { get; set; }
-
-    public TFunction Method { get; set; }
-
-    public TFunction OriginalFunction { get; set; }
+    /// <summary>
+    /// Creates a listener for a scan using <typeparamref name="TFunction"/>'s name for the Scan ID.
+    /// </summary>
+    /// <param name="success">Success callback.</param>
+    void CreateListener<TFunction>(Action<nint> success);
 }
