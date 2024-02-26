@@ -3,6 +3,7 @@ using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
 using Reloaded.Mod.Interfaces;
 using SharedScans.Interfaces;
 using SharedScans.Reloaded.Configuration;
+using SharedScans.Reloaded.Scans;
 using SharedScans.Reloaded.Template;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,7 +20,7 @@ public class Mod : ModBase, IExports
     private Config config;
     private readonly IModConfig modConfig;
 
-    private readonly Scans.SharedScans scans;
+    private readonly SharedScansService scans;
 
     public Mod(ModContext context)
     {
@@ -37,7 +38,7 @@ public class Mod : ModBase, IExports
 #endif
 
         this.modLoader.GetController<IStartupScanner>().TryGetTarget(out var scanner);
-        this.scans = new(this.hooks);
+        this.scans = new(new(scanner!, this.hooks));
         this.modLoader.AddOrReplaceController<ISharedScans>(this.owner, this.scans);
 
         this.modLoader.OnModLoaderInitialized += () =>

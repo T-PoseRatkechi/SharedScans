@@ -1,21 +1,20 @@
-﻿using Reloaded.Hooks.Definitions;
-using SharedScans.Interfaces;
+﻿using SharedScans.Interfaces;
 
 namespace SharedScans.Reloaded.Scans;
 
-internal class SharedScans : ISharedScans
+internal class SharedScansService : ISharedScans
 {
-    private readonly IReloadedHooks hooks;
+    private readonly ScansManager scansManager;
     private readonly List<object> listeners = new();
 
-    public SharedScans(IReloadedHooks hooks)
+    public SharedScansService(ScansManager scansManager)
     {
-        this.hooks = hooks;
+        this.scansManager = scansManager;
     }
 
     public void AddScan<TFunction>(string id, string pattern)
     {
-        ScanHooks.Add(id, pattern, (hooks, result) =>
+        this.scansManager.Add(id, pattern, (hooks, result) =>
         {
             foreach (var listener in this.listeners)
             {
@@ -23,7 +22,9 @@ internal class SharedScans : ISharedScans
                 {
                     list.Hook.Pattern = pattern;
                     list.Hook.Address = result;
-                    list.Hook.HookInstance = this.hooks.CreateHook(list.Hook.Method, result).Activate();
+                    var hook = hooks.CreateHook(list.Hook.Method, result).Activate();
+                    list.Hook.HookInstance = hook;
+                    list.Hook.OriginalFunction = hook.OriginalFunction;
 
                     Log.Information($"Hook created || {id} || For: {list.Name}");
                 }
@@ -45,6 +46,7 @@ internal class SharedScans : ISharedScans
         var hook = new HookContainer<TFunction>()
         {
             Id = id,
+            Method = hookFunc,
         };
 
         var listener = new Listener<TFunction>(modName, id, hook);

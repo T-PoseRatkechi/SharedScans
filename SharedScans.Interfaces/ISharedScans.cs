@@ -22,4 +22,6 @@ public class HookContainer<TFunction>
     public object? HookInstance { get; set; }
 
     public TFunction Method { get; set; }
+
+    public TFunction OriginalFunction { get; set; }
 }
