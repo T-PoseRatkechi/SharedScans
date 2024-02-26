@@ -5,54 +5,42 @@ namespace SharedScans.Reloaded.Scans;
 internal class SharedScansService : ISharedScans
 {
     private readonly ScansManager scansManager;
-    private readonly List<object> listeners = new();
+    private readonly List<IScanListener> listeners = new();
 
     public SharedScansService(ScansManager scansManager)
     {
         this.scansManager = scansManager;
     }
 
-    public void AddScan<TFunction>(string id, string pattern)
+    public void AddScan(string id, string pattern)
     {
         this.scansManager.Add(id, pattern, (hooks, result) =>
         {
-            foreach (var listener in this.listeners)
+            var scanListeners = this.listeners.Where(x => x.Id == id).ToArray();
+            foreach (var listener in scanListeners)
             {
-                if (listener is Listener<TFunction> list && list.Id == id)
-                {
-                    list.Hook.Pattern = pattern;
-                    list.Hook.Address = result;
-                    var hook = hooks.CreateHook(list.Hook.Method, result).Activate();
-                    list.Hook.HookInstance = hook;
-                    list.Hook.OriginalFunction = hook.OriginalFunction;
-
-                    Log.Information($"Hook created || {id} || For: {list.Name}");
-                }
+                listener.SetScanFound(hooks, result);
             }
         });
     }
 
     public void AddScan<TFunction>(string pattern)
-        => this.AddScan<TFunction>(typeof(TFunction).Name, pattern);
+        => this.AddScan(typeof(TFunction).Name, pattern);
 
-    public HookContainer<TFunction> CreateHook<TFunction>(string id, Action<nint> success)
+    public void CreateListener(string id, Action<nint> success)
     {
-        throw new NotImplementedException();
+        var listener = new ResultListener(id, success);
+        this.listeners.Add(listener);
     }
 
-    public HookContainer<TFunction> CreateHook<TFunction>(string modName, TFunction hookFunc)
+    public void CreateListener<TFunction>(Action<nint> success)
+        => this.CreateListener(typeof(TFunction).Name, success);
+
+    public HookContainer<TFunction> CreateHook<TFunction>(TFunction hookFunction, string owner)
     {
         var id = typeof(TFunction).Name;
-        var hook = new HookContainer<TFunction>()
-        {
-            Id = id,
-            Method = hookFunc,
-        };
-
-        var listener = new Listener<TFunction>(modName, id, hook);
+        var listener = new HookListener<TFunction>(owner, id, hookFunction);
         this.listeners.Add(listener);
         return listener.Hook;
     }
-
-    private record Listener<TFunction>(string Name, string Id, HookContainer<TFunction> Hook);
 }
