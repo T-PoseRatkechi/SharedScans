@@ -1,0 +1,21 @@
+{
+  "ModId": "SharedScans.Reloaded",
+  "ModName": "Shared Scans",
+  "ModAuthor": "zutomayofan50",
+  "ModVersion": "1.0.0",
+  "ModDescription": "",
+  "ModDll": "SharedScans.Reloaded.dll",
+  "ModIcon": "Preview.png",
+  "ModR2RManagedDll32": "x86/SharedScans.Reloaded.dll",
+  "ModR2RManagedDll64": "x64/SharedScans.Reloaded.dll",
+  "ModNativeDll32": "",
+  "ModNativeDll64": "",
+  "IsLibrary": false,
+  "ReleaseMetadataFileName": "SharedScans.Reloaded.ReleaseMetadata.json",
+  "PluginData": {},
+  "IsUniversalMod": false,
+  "ModDependencies": [ "reloaded.sharedlib.hooks" ],
+  "OptionalDependencies": [],
+  "SupportedAppId": [],
+  "ProjectUrl": ""
+}
