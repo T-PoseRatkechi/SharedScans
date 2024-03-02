@@ -27,6 +27,15 @@ public interface ISharedScans
     HookContainer<TFunction> CreateHook<TFunction>(TFunction hookFunction, string owner);
 
     /// <summary>
+    /// Create a Reloaded wrapper for the given function, once the given
+    /// function is successfully found.
+    /// </summary>
+    /// <typeparam name="TFunction">Function.</typeparam>
+    /// <param name="owner">Wrapper owner.</param>
+    /// <returns>Wrapper container. Use to call original function.</returns>
+    WrapperContainer<TFunction> CreateWrapper<TFunction>(string owner);
+
+    /// <summary>
     /// Creates a listener for a scan with the given ID.
     /// Once found the callback is passed the scan result.
     /// </summary>

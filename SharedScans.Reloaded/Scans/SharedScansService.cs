@@ -54,4 +54,12 @@ internal class SharedScansService : ISharedScans
         this.listeners.Add(listener);
         return listener.Hook;
     }
+
+    public WrapperContainer<TFunction> CreateWrapper<TFunction>(string owner)
+    {
+        var id = typeof(TFunction).Name;
+        var listener = new WrapperListener<TFunction>(owner, id);
+        this.listeners.Add(listener);
+        return listener.Wrapper;
+    }
 }
