@@ -12,8 +12,14 @@ internal class SharedScansService : ISharedScans
         this.scansManager = scansManager;
     }
 
-    public void AddScan(string id, string pattern)
+    public void AddScan(string id, string? pattern)
     {
+        if (string.IsNullOrEmpty(pattern))
+        {
+            Log.Verbose($"{id}: No pattern given.");
+            return;
+        }
+
         this.scansManager.Add(id, pattern, (hooks, result) =>
         {
             var scanListeners = this.listeners.Where(x => x.Id == id).ToArray();
@@ -29,7 +35,7 @@ internal class SharedScansService : ISharedScans
         });
     }
 
-    public void AddScan<TFunction>(string pattern)
+    public void AddScan<TFunction>(string? pattern)
         => this.AddScan(typeof(TFunction).Name, pattern);
 
     public void CreateListener(string id, Action<nint> success)

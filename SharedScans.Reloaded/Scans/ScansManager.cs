@@ -15,19 +15,13 @@ internal class ScansManager
     }
 
     /// <summary>
-    /// Add a new a scan hook.
+    /// Add a new scan hook.
     /// </summary>
     /// <param name="name">Name of scan.</param>
     /// <param name="pattern">Pattern to scan for.</param>
     /// <param name="success">Success action with hooks and result.</param>
-    public void Add(string name, string? pattern, Action<IReloadedHooks, nint> success)
+    public void Add(string name, string pattern, Action<IReloadedHooks, nint> success)
     {
-        if (string.IsNullOrEmpty(pattern))
-        {
-            Log.Verbose($"{name}: No pattern given.");
-            return;
-        }
-
         this.scanner.Scan(name, pattern, result => success.Invoke(this.hooks, result));
     }
 }

@@ -7,14 +7,14 @@ public interface ISharedScans
     /// </summary>
     /// <param name="id">Scan ID.</param>
     /// <param name="pattern">Scan pattern.</param>
-    void AddScan(string id, string pattern);
+    void AddScan(string id, string? pattern);
 
     /// <summary>
     /// Add a scan for a function using <typeparamref name="TFunction"/>'s name for the Scan ID.
     /// </summary>
     /// <typeparam name="TFunction">Function scan is for.</typeparam>
-    /// <param name="pattern">Scan pattern.</param>
-    void AddScan<TFunction>(string pattern);
+    /// <param name="pattern">Scan pattern. If null then scan is skipped.</param>
+    void AddScan<TFunction>(string? pattern);
 
     /// <summary>
     /// Create a Reloaded hook for the given function, once the given
