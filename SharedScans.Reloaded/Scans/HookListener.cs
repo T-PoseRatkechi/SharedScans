@@ -22,9 +22,7 @@ public class HookListener<TFunction> : IScanListener
     public void SetScanFound(IReloadedHooks hooks, nint result)
     {
         var reloadedHook = hooks.CreateHook(this.Hook.HookFunction, result).Activate();
-        this.Hook.HookInstance = reloadedHook;
-        this.Hook.OriginalFunction = reloadedHook.OriginalFunction;
-        this.Hook.Address = result;
+        this.Hook.Hook = reloadedHook;
 
         Log.Debug($"Hook created for: {this.Hook.Owner} || ID: {this.Hook.Id}");
     }

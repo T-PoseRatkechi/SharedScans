@@ -1,4 +1,6 @@
-﻿namespace SharedScans.Interfaces;
+﻿using Reloaded.Hooks.Definitions;
+
+namespace SharedScans.Interfaces;
 
 public class HookContainer<TFunction>
 {
@@ -8,9 +10,5 @@ public class HookContainer<TFunction>
 
     public TFunction HookFunction { get; init; }
 
-    public nint Address { get; set; }
-
-    public object? HookInstance { get; set; }
-
-    public TFunction OriginalFunction { get; set; }
+    public IHook<TFunction>? Hook { get; set; }
 }
